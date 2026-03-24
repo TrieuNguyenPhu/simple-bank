@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -55,6 +56,11 @@ func (server *Server) setupRouter() {
 	authRoutes.POST("/transfers", server.createTransfer)
 
 	server.router = router
+}
+
+// Handler returns the HTTP handler for the Gin router.
+func (server *Server) Handler() http.Handler {
+	return server.router
 }
 
 // Start runs the HTTP server on a specific address.
