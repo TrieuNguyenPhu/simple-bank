@@ -27,6 +27,12 @@ compose-ps:
 compose-build:
 	docker compose build
 
+infra-up:
+	docker compose up -d postgres17 redis
+
+infra-down:
+	docker compose stop postgres17 redis
+
 createdb:
 	docker exec -it postgres17 createdb --username=root --owner=root simple_bank
 
@@ -83,4 +89,4 @@ evans:
 redis:
 	docker run --name redis -p 6379:6379 -d redis:7-alpine
 
-.PHONY: network postgres mysql compose-up compose-down compose-restart compose-logs compose-ps compose-build createdb dropdb migrateup migratedown migrateup1 migratedown1 new_migration db_docs db_schema sqlc test server mock proto evans redis
+.PHONY: network postgres mysql compose-up compose-down compose-restart compose-logs compose-ps compose-build infra-up infra-down createdb dropdb migrateup migratedown migrateup1 migratedown1 new_migration db_docs db_schema sqlc test server mock proto evans redis
