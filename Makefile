@@ -1,3 +1,8 @@
+DB_URL=postgresql://trieunguyen:trieu080604@localhost:5432/simple_bank?sslmode=disable
+
+compose-up:
+	docker compose up -d
+
 createdb:
 	docker exec -it postgres17 createdb --username=trieunguyen --owner=trieunguyen simple_bank
 
@@ -5,12 +10,12 @@ dropdb:
 	docker exec -it postgres17 dropdb --username=trieunguyen simple_bank
 
 migrateup:
-	docker exec -it postgres17 migrate -path db/migration -database "postgresql://trieunguyen:trieu080604@localhost:5432/simple_bank?sslmode=disable" -verbose up
+	migrate -path db/migration -database "$(DB_URL)" -verbose up
 
 migratedown:
-	docker exec -it postgres17 migrate -path db/migration -database "postgresql://trieunguyen:trieu080604@localhost:5432/simple_bank?sslmode=disable" -verbose down
+	migrate -path db/migration -database "$(DB_URL)" -verbose down
 
 sqlc:
 	sqlc generate
 
-.PHONY: createdb dropdb migrateup migratedown sqlc
+.PHONY: compose-up compose-down compose-restart compose-logs compose-ps compose-build createdb dropdb migrateup migratedown sqlc
