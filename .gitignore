@@ -1,46 +1,26 @@
-﻿# Binaries
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Local env / secrets
+app.env
+*.log
 
-# Test binaries and coverage
+# IDE
+.vscode/
+.idea/
+
+# Binaries
+/simplebank
+/main
+*.exe
 *.test
 *.out
-coverage.out
-coverage.html
 
-# Go workspace
-bin/
+# Coverage / deps
+coverage*
 vendor/
 
-# Build artifacts
-dist/
-build/
+# Frontend
+frontend/node_modules/
+frontend/dist/
 
-# Logs
-*.log
-logs/
-
-# Env files
-.env
-.env.*
-!.env.example
-
-# IDE / Editor
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS files
+# OS
 .DS_Store
 Thumbs.db
-
-# Docker override / local runtime files
-docker-compose.override.yml
-
-# Temporary files
-*.tmp
-*.temp
