@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -196,7 +197,6 @@ func runGatewayServer(
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/", grpcMux)
 
 	statikFS, err := fs.New()
 	if err != nil {
@@ -205,6 +205,19 @@ func runGatewayServer(
 
 	swaggerHandler := http.StripPrefix("/swagger/", http.FileServer(statikFS))
 	mux.Handle("/swagger/", swaggerHandler)
+
+	ginServer, err := api.NewServer(config, store)
+	if err != nil {
+		log.Fatal().Err(err).Msg("cannot create gin server")
+	}
+
+	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, "/v1/") {
+			grpcMux.ServeHTTP(w, r)
+			return
+		}
+		ginServer.Handler().ServeHTTP(w, r)
+	}))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: config.AllowedOrigins,
